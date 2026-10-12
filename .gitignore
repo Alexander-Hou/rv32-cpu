@@ -1,0 +1,44 @@
+# ── 本项目的生成产物 ─────────────────────────────────────────
+# ChiselSim / svsim 的仿真输出
+test_run_dir/
+# 生成的 RTL 统一输出到这里（见 README 的约定）
+build/
+# Firrtl / 后端中间产物
+*.fir
+*.anno.json
+# 波形
+*.vcd
+*.fst
+*.wlf
+
+# 注意：这里刻意不全局忽略 *.v / *.sv。
+# 生成的 SystemVerilog 一律落在 build/ 下（已被忽略），
+# 这样可以避免以后手写的 Verilog 测试台被静默排除在版本控制之外。
+
+# ── sbt / Scala ──────────────────────────────────────────────
+# 递归匹配所有 target 目录，包含 project/target
+target/
+.bsp/
+.bloop/
+.metals/
+.scala-build/
+lib_managed/
+src_managed/
+project/boot/
+*.class
+
+# ── JVM 崩溃日志 ─────────────────────────────────────────────
+hs_err_pid*
+replay_pid*
+
+# ── IDE / 编辑器 ─────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+\#*\#
+
+# ── 操作系统 ─────────────────────────────────────────────────
+.DS_Store
