@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="730" viewBox="0 0 1320 730" role="img" aria-labelledby="title desc">
+<title id="title">rv32-cpu · 顶层架构</title><desc id="desc">Top 实例化单周期 Core 与共享 Memory。Core 内含 PC、译码、寄存器组、ALU、分支、CSR 和写回逻辑。imem 与 dmem 使用同一块 16 KiB 字节存储。</desc>
+<defs>
+  <marker id="blue-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#2563eb"/></marker>
+  <marker id="green-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#0f766e"/></marker>
+</defs>
+<style>
+  text { font-family: 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif; fill: #172b4d; }
+  .title { font-size: 30px; font-weight: 700; }
+  .subtitle { font-size: 18px; fill: #52647e; }
+  .heading { font-size: 23px; font-weight: 700; }
+  .body { font-size: 19px; }
+  .small { font-size: 16px; fill: #52647e; }
+  .label { font-size: 17px; fill: #2563eb; }
+  .green { font-size: 17px; fill: #0f766e; }
+</style>
+<rect width="1320" height="730" rx="18" fill="#f8fafc"/>
+<text x="32" y="48" class="title" text-anchor="start">rv32-cpu · 顶层架构</text>
+<text x="32" y="82" class="subtitle" text-anchor="start">单周期核心  /  32 位数据通路  /  共享指令与数据存储</text>
+<rect x="28" y="110" width="1264" height="554" rx="20" fill="#ffffff" stroke="#a8b8cd" stroke-width="1.7"/>
+<text x="52" y="149" class="heading" text-anchor="start">Top</text>
+<text x="1259" y="149" class="small" text-anchor="end">Chisel 隐式 clock / reset 连接各模块</text>
+<rect x="64" y="180" width="430" height="320" rx="14" fill="#eff6ff" stroke="#96b8ed" stroke-width="1.7"/>
+<text x="88" y="216" class="heading" text-anchor="start">Core</text>
+<text x="470" y="214" class="small" text-anchor="end">单个 Chisel 模块</text>
+<rect x="88" y="240" width="182" height="72" rx="14" fill="#ffffff" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="179" y="269" class="body" text-anchor="middle">PC / 下一 PC</text>
+<text x="179" y="294" class="small" text-anchor="middle">复位地址 0x00000000</text>
+<rect x="288" y="240" width="182" height="72" rx="14" fill="#ffffff" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="379" y="269" class="body" text-anchor="middle">译码 / 立即数</text>
+<text x="379" y="294" class="small" text-anchor="middle">BitPat + ListLookup</text>
+<rect x="88" y="320" width="182" height="72" rx="14" fill="#ffffff" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="179" y="349" class="body" text-anchor="middle">通用寄存器组</text>
+<text x="179" y="374" class="small" text-anchor="middle">32 × 32 bit</text>
+<rect x="288" y="320" width="182" height="72" rx="14" fill="#ffffff" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="379" y="349" class="body" text-anchor="middle">ALU / 分支</text>
+<text x="379" y="374" class="small" text-anchor="middle">运算与控制转移</text>
+<rect x="88" y="400" width="182" height="72" rx="14" fill="#ffffff" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="179" y="429" class="body" text-anchor="middle">CSR 存储</text>
+<text x="179" y="454" class="small" text-anchor="middle">4096 × 32 bit</text>
+<rect x="288" y="400" width="182" height="72" rx="14" fill="#ffffff" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="379" y="429" class="body" text-anchor="middle">写回选择</text>
+<text x="379" y="454" class="small" text-anchor="middle">ALU / MEM / PC+4 / CSR</text>
+<rect x="870" y="180" width="386" height="320" rx="14" fill="#ecfdf5" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="894" y="216" class="heading" text-anchor="start">Memory</text>
+<rect x="894" y="252" width="338" height="132" rx="14" fill="#ffffff" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="1063" y="287" class="heading" text-anchor="middle">共享字节存储</text>
+<text x="1063" y="325" class="body" text-anchor="middle">Mem(16384, UInt(8.W))</text>
+<text x="1063" y="359" class="small" text-anchor="middle">16 KiB · 小端 · 指令 / 数据共用</text>
+<text x="1063" y="430" class="body" text-anchor="middle">组合读取，时钟沿写入</text>
+<text x="1063" y="462" class="body" text-anchor="middle">连续四个字节组成一个 32 位字</text>
+<text x="682" y="222" class="heading" text-anchor="middle">imem · 取指接口</text>
+<polyline points="494,260 870,260" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="682" y="250" class="label" text-anchor="middle">addr [31:0]  ← 当前 PC</text>
+<polyline points="870,300 494,300" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="682" y="290" class="label" text-anchor="middle">inst [31:0]</text>
+<text x="682" y="356" class="heading" text-anchor="middle">dmem · 数据接口</text>
+<polyline points="494,394 870,394" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="682" y="384" class="label" text-anchor="middle">addr / wdata [31:0]，wen [1:0]</text>
+<polyline points="870,436 494,436" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="682" y="426" class="label" text-anchor="middle">rdata [31:0]</text>
+<polyline points="280,500 280,540" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<rect x="64" y="540" width="702" height="84" rx="14" fill="#f8fafc" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="88" y="574" class="heading" text-anchor="start">Top 输出</text>
+<text x="255" y="573" class="body" text-anchor="start">gp = regfile(3)</text>
+<text x="470" y="573" class="body" text-anchor="start">exit = (PC == 0x44)</text>
+<text x="255" y="606" class="small" text-anchor="start">用于观察内部状态；exit 不会停止 PC 更新。</text>
+<rect x="870" y="540" width="386" height="84" rx="14" fill="#f8fafc" stroke="#ccd7e5" stroke-width="1.7"/>
+<text x="1063" y="574" class="heading" text-anchor="middle">rv32ui-p-add.hex</text>
+<text x="1063" y="606" class="small" text-anchor="middle">loadMemoryFromFile · 初始化字节内容</text>
+<polyline points="1063,540 1063,500" fill="none" stroke="#0f766e" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#green-arrow)"/>
+<text x="32" y="704" class="subtitle" text-anchor="start">独立接口 ≠ 独立存储器；当前没有缓存、总线协议或访存等待握手。</text>
+</svg>

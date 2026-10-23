@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000" role="img" aria-labelledby="title desc">
+<title id="title">Core · 单周期数据通路</title><desc id="desc">IF、ID、EX、MEM、WB 是逻辑分段，没有流水级寄存器。主路径从 PC 和取指，经译码、寄存器、ALU 与访存到写回。分支、跳转和 ECALL 反馈至下一 PC 选择器。</desc>
+<defs>
+  <marker id="blue-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#2563eb"/></marker>
+  <marker id="green-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#0f766e"/></marker>
+</defs>
+<style>
+  text { font-family: 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif; fill: #172b4d; }
+  .title { font-size: 30px; font-weight: 700; }
+  .subtitle { font-size: 18px; fill: #52647e; }
+  .heading { font-size: 23px; font-weight: 700; }
+  .body { font-size: 19px; }
+  .small { font-size: 16px; fill: #52647e; }
+  .label { font-size: 17px; fill: #2563eb; }
+  .green { font-size: 17px; fill: #0f766e; }
+</style>
+<rect width="1440" height="1000" rx="18" fill="#f8fafc"/>
+<text x="32" y="48" class="title" text-anchor="start">Core · 单周期数据通路</text>
+<text x="32" y="84" class="subtitle" text-anchor="start">五个逻辑分段在同一周期内工作；PC、寄存器组、CSR 与存储写入在时钟沿更新。</text>
+<polyline points="1385,470 1412,470 1412,135 420,135 420,240" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="870" y="124" class="label" text-anchor="middle">wb_data → rd  ·  rf_wen 有效时写入寄存器组</text>
+<polyline points="520,240 520,190 1025,190 1025,240" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="772" y="178" class="label" text-anchor="middle">rs2_data → dmem.wdata  ·  SW</text>
+<rect x="52" y="240" width="210" height="320" rx="14" fill="#ffffff" stroke="#b8c9df" stroke-width="1.7"/>
+<text x="72" y="274" class="small" text-anchor="start">01 / IF</text>
+<text x="72" y="312" class="heading" text-anchor="start">取指</text>
+<rect x="330" y="240" width="240" height="320" rx="14" fill="#ffffff" stroke="#b8c9df" stroke-width="1.7"/>
+<text x="350" y="274" class="small" text-anchor="start">02 / ID</text>
+<text x="350" y="312" class="heading" text-anchor="start">译码与读寄存器</text>
+<rect x="640" y="240" width="215" height="320" rx="14" fill="#ffffff" stroke="#b8c9df" stroke-width="1.7"/>
+<text x="660" y="274" class="small" text-anchor="start">03 / EX</text>
+<text x="660" y="312" class="heading" text-anchor="start">执行</text>
+<rect x="925" y="240" width="200" height="320" rx="14" fill="#ffffff" stroke="#b8c9df" stroke-width="1.7"/>
+<text x="945" y="274" class="small" text-anchor="start">04 / MEM</text>
+<text x="945" y="312" class="heading" text-anchor="start">访存与 CSR</text>
+<rect x="1195" y="240" width="190" height="320" rx="14" fill="#ffffff" stroke="#b8c9df" stroke-width="1.7"/>
+<text x="1215" y="274" class="small" text-anchor="start">05 / WB</text>
+<text x="1215" y="312" class="heading" text-anchor="start">写回</text>
+<rect x="70" y="338" width="174" height="74" rx="10" fill="#eff6ff" stroke="#96b8ed" stroke-width="1.7"/>
+<text x="157" y="369" class="body" text-anchor="middle">PC 寄存器</text>
+<text x="157" y="396" class="small" text-anchor="middle">复位为 0</text>
+<polyline points="157,412 157,443" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<rect x="70" y="443" width="174" height="92" rx="10" fill="#ecfdf5" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="157" y="477" class="body" text-anchor="middle">Memory.imem</text>
+<text x="157" y="507" class="small" text-anchor="middle">addr → inst</text>
+<text x="350" y="356" class="small" text-anchor="start">指令匹配 / 控制信号</text>
+<text x="350" y="386" class="small" text-anchor="start">I / S / B / U / J / zimm</text>
+<rect x="348" y="422" width="204" height="113" rx="10" fill="#eff6ff" stroke="#96b8ed" stroke-width="1.7"/>
+<text x="450" y="454" class="body" text-anchor="middle">通用寄存器组</text>
+<text x="450" y="484" class="small" text-anchor="middle">rs1 / rs2 → 源值</text>
+<text x="450" y="514" class="small" text-anchor="middle">rd ← 写回值；x0 读零</text>
+<rect x="658" y="338" width="179" height="105" rx="10" fill="#eff6ff" stroke="#96b8ed" stroke-width="1.7"/>
+<text x="747" y="372" class="heading" text-anchor="middle">ALU</text>
+<text x="747" y="402" class="small" text-anchor="middle">运算 / 有效地址</text>
+<text x="747" y="427" class="small" text-anchor="middle">跳转目标地址</text>
+<rect x="658" y="461" width="179" height="74" rx="10" fill="#f0fdfa" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="747" y="492" class="body" text-anchor="middle">分支比较 / 目标</text>
+<text x="747" y="519" class="small" text-anchor="middle">rs1 ? rs2 / PC + imm_b</text>
+<rect x="943" y="338" width="164" height="105" rx="10" fill="#ecfdf5" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="1025" y="372" class="body" text-anchor="middle">Memory.dmem</text>
+<text x="1025" y="402" class="small" text-anchor="middle">addr / wdata / wen</text>
+<text x="1025" y="427" class="small" text-anchor="middle">rdata</text>
+<rect x="943" y="461" width="164" height="74" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.7"/>
+<text x="1025" y="492" class="body" text-anchor="middle">CSR 读改写</text>
+<text x="1025" y="519" class="small" text-anchor="middle">rs1 或 zimm</text>
+<text x="1215" y="359" class="body" text-anchor="start">选择 wb_data</text>
+<text x="1215" y="394" class="body" text-anchor="start">• ALU 结果</text>
+<text x="1215" y="429" class="body" text-anchor="start">• dmem.rdata</text>
+<text x="1215" y="464" class="body" text-anchor="start">• PC + 4</text>
+<text x="1215" y="499" class="body" text-anchor="start">• CSR 原值</text>
+<text x="1215" y="535" class="small" text-anchor="start">写使能：rf_wen</text>
+<polyline points="244,480 284,480 284,390 330,390" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="296" y="379" class="label" text-anchor="middle">inst</text>
+<polyline points="570,390 640,390" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="605" y="366" class="label" text-anchor="middle">op1</text>
+<text x="605" y="421" class="label" text-anchor="middle">op2</text>
+<polyline points="855,390 925,390" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="890" y="379" class="label" text-anchor="middle">addr</text>
+<polyline points="1125,390 1195,390" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="1160" y="379" class="label" text-anchor="middle">rdata</text>
+<polyline points="1125,500 1195,500" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="1160" y="489" class="label" text-anchor="middle">CSR</text>
+<polyline points="790,560 790,600 1290,600 1290,560" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#blue-arrow)"/>
+<text x="1070" y="588" class="label" text-anchor="middle">alu_out → 写回选择器</text>
+<rect x="52" y="700" width="500" height="176" rx="14" fill="#f0fdfa" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="76" y="738" class="heading" text-anchor="start">下一 PC 选择器</text>
+<text x="76" y="775" class="body" text-anchor="start">默认：PC + 4</text>
+<text x="76" y="808" class="body" text-anchor="start">分支成立 → PC + imm_b；JAL / JALR → ALU</text>
+<text x="76" y="841" class="body" text-anchor="start">ECALL → csr_regfile[0x305]（mtvec）</text>
+<polyline points="690,560 690,660 590,660 590,738 552,738" fill="none" stroke="#0f766e" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#green-arrow)"/>
+<text x="711" y="652" class="green" text-anchor="start">br_flg / br_target / 跳转目标</text>
+<polyline points="965,560 965,815 552,815" fill="none" stroke="#f8fafc" stroke-width="9" stroke-linejoin="round"/>
+<polyline points="965,560 965,815 552,815" fill="none" stroke="#0f766e" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#green-arrow)"/>
+<text x="758" y="803" class="green" text-anchor="middle">ECALL → mtvec</text>
+<polyline points="52,750 28,750 28,375 70,375" fill="none" stroke="#0f766e" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#green-arrow)"/>
+<text x="52" y="677" class="green" text-anchor="start">pc_next → PC</text>
+<text x="1020" y="705" class="small" text-anchor="start">PC + 4 也送入写回选择器</text>
+<text x="1020" y="735" class="small" text-anchor="start">用于 JAL / JALR 的返回地址</text>
+<rect x="52" y="919" width="24" height="18" rx="4" fill="#ecfdf5" stroke="#8dcab9" stroke-width="1.7"/>
+<text x="88" y="935" class="small" text-anchor="start">绿色存储卡片：外部 Memory 的两个端口，共享同一 mem</text>
+<text x="52" y="970" class="small" text-anchor="start">蓝线：主要数据路径   ·   绿线：PC 反馈   ·   部分控制线与 PC + 4 连线省略；方框之间没有流水级寄存器。</text>
+</svg>
